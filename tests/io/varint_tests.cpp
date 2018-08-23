@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE( test_unsigned )
    BOOST_CHECK_EQUAL( UINT_LENGTH, packed_u.size() );
    BOOST_CHECK_EQUAL( EXPECTED_UINTS, std::string( packed_u.data(), packed_u.size() ) );
    std::vector<fc::unsigned_int> unpacked_u;
-   fc::raw::unpack<std::vector<fc::unsigned_int>>( packed_u, unpacked_u, 3 );
+   fc::raw::unpack_from_vector<std::vector<fc::unsigned_int>>( packed_u, unpacked_u, 3 );
    BOOST_CHECK_EQUAL( TEST_U.size(), unpacked_u.size() );
    for( size_t i = 0; i < TEST_U.size(); i++ )
       BOOST_CHECK_EQUAL( TEST_U[i].value, unpacked_u[i].value );
@@ -91,8 +91,8 @@ BOOST_AUTO_TEST_CASE( test_limits )
    static const std::string overlong = "\200\200\200\200\200\200\200\200\300\200\1";
 
    fc::unsigned_int dest;
-   BOOST_CHECK_THROW( fc::raw::unpack( std::vector<char>( overflow.begin(), overflow.end() ), dest, 3 ), fc::overflow_exception );
-   BOOST_CHECK_THROW( fc::raw::unpack( std::vector<char>( overlong.begin(), overlong.end() ), dest, 3 ), fc::overflow_exception );
+   BOOST_CHECK_THROW( fc::raw::unpack_from_vector( std::vector<char>( overflow.begin(), overflow.end() ), dest, 3 ), fc::overflow_exception );
+   BOOST_CHECK_THROW( fc::raw::unpack_from_vector( std::vector<char>( overlong.begin(), overlong.end() ), dest, 3 ), fc::overflow_exception );
 } FC_LOG_AND_RETHROW() }
 
 BOOST_AUTO_TEST_SUITE_END()
