@@ -92,6 +92,8 @@ namespace fc
    void to_variant( const uint64_t& var,  variant& vo,  uint32_t max_depth = 1 );
    void to_variant( const int64_t& var,   variant& vo,  uint32_t max_depth = 1 );
 
+   void to_variant( const bool& var,      variant& vo,  uint32_t max_depth = 1 );
+
    void to_variant( const variant_object& var, variant& vo,        uint32_t max_depth );
    void from_variant( const variant& var,      variant_object& vo, uint32_t max_depth );
    void to_variant( const mutable_variant_object& var, variant& vo,   uint32_t max_depth );
@@ -134,10 +136,10 @@ namespace fc
    template<typename T>
    void from_variant( const variant& var, std::deque<T>& vo, uint32_t max_depth );
 
-   template<typename T>
-   void to_variant( const fc::flat_set<T>& var,   variant& vo, uint32_t max_depth );
-   template<typename T>
-   void from_variant( const variant& var, fc::flat_set<T>& vo, uint32_t max_depth );
+   template<typename T, typename... A>
+   void to_variant( const fc::flat_set<T, A...>& var,   variant& vo, uint32_t max_depth );
+   template<typename T, typename... A>
+   void from_variant( const variant& var, fc::flat_set<T, A...>& vo, uint32_t max_depth );
 
    template<typename T>
    void to_variant( const std::set<T>& var,  variant& vo,  uint32_t max_depth );
