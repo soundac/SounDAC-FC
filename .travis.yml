@@ -5,14 +5,12 @@ cache: ccache
 git:
   depth: 1
 
-dist: trusty
+dist: xenial
 
 sudo: true
 
 install:
- - echo "deb http://de.archive.ubuntu.com/ubuntu xenial main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
- - sudo apt-get update
- - sudo apt-get install --allow-unauthenticated g++ libboost-all-dev cmake libreadline-dev libssl-dev autoconf parallel ccache
+ - sudo apt-get install --allow-unauthenticated libboost-thread-dev libboost-iostreams-dev libboost-date-time-dev libboost-system-dev libboost-filesystem-dev libboost-program-options-dev libboost-chrono-dev libboost-test-dev libboost-context-dev libboost-regex-dev libboost-coroutine-dev cmake parallel
 
 addons:
   sonarcloud:
@@ -27,6 +25,7 @@ env:
     - CCACHE_SLOPPINESS=include_file_ctime,include_file_mtime,time_macros
 
 script:
+ - ccache -s
  - cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS=--coverage -DCMAKE_CXX_FLAGS=--coverage -DBoost_USE_STATIC_LIBS=OFF  -DCMAKE_CXX_OUTPUT_EXTENSION_REPLACE=ON .
  - 'which build-wrapper-linux-x86-64 && build-wrapper-linux-x86-64 --out-dir bw-output make -j 2 || make -j 2'
  - set -o pipefail
@@ -37,3 +36,4 @@ script:
  - tests/sha_test 2>&1 | cat
  - 'find CMakeFiles/fc.dir -type d | while read d; do gcov -o "$d" "${d/CMakeFiles*.dir/./}"/*.cpp; done >/dev/null'
  - 'which sonar-scanner && sonar-scanner || true'
+ - ccache -s
